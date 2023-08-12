@@ -8,11 +8,6 @@
       "id": "{9ca5a4a8-58d1-4a47-8e0d-5e53a21c9a7b}"
     }
   },
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "{9ca5a4a8-58d1-4a47-8e0d-5e53a21c9a7b}"
-    }
-  },
   "manifest_version": 3,
   "homepage_url": "https://github.com/AminBhst/brisk-browser-extension",
   "background": {
