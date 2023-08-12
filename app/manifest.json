@@ -14,7 +14,7 @@
     }
   },
   "manifest_version": 3,
-  "homepage_url": "https://github.com/AminBhst/brisk_browser_extension",
+  "homepage_url": "https://github.com/AminBhst/brisk-browser-extension",
   "background": {
     "service_worker": "scripts/background.js"
   },
