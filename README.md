@@ -18,5 +18,5 @@ As of version 1.3.0, Brisk supports browser integration that allows for capturin
 ## Build From Source
 ```shell
 yarn install
-yarn build firefox
+yarn build {browser-name}
 ```
