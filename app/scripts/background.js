@@ -4,20 +4,21 @@ const defaultPort = 3020;
 browser.downloads.onCreated.addListener(handleOnCreateDownload);
 
 async function handleOnCreateDownload(downloadItem) {
-    await removeBrowserDownload(downloadItem.id);
     await sendBriskRequest(downloadItem)
 }
 
 async function sendBriskRequest(downloadItem) {
     let port = await getBriskPort();
     const baseUrl = "http://localhost:" + port;
-    console.log(baseUrl);
     let body = {
         'url' : downloadItem.url,
         'totalBytes': downloadItem.totalBytes,
         'cookies': downloadItem.cookies
     };
-    fetch(baseUrl, {method: 'POST', body: JSON.stringify(body)}).then(pass);
+    let response = await fetch(baseUrl, {method: 'POST', body: JSON.stringify(body)});
+    if (response.status === 200) {
+        await removeBrowserDownload(downloadItem.id);
+    }
 }
 
 async function getBriskPort() {
