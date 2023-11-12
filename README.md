@@ -3,10 +3,10 @@ As of version 1.3.0, Brisk supports browser integration that allows for capturin
 
 ## Features
 - Capture download requests from the browser and directly adding them to Brisk
-- Extract all download links from a selected text and add them to Brisk in one go
-
+- Extract all download links from a selected text and add them to Brisk all at once
 
 ## Demo
+<img align="center" src="Brisk-Demo.gif">
 
 ### Installation
 #### Chrome / Edge / Opera
@@ -20,7 +20,6 @@ As of version 1.3.0, Brisk supports browser integration that allows for capturin
 [link-firefox]: https://addons.mozilla.org/en-US/firefox/addon/brisk/
 
 [<img src="https://raw.githubusercontent.com/alrra/browser-logos/90fdf03c/src/firefox/firefox.svg" width="48" alt="Firefox" valign="middle">][link-firefox]
-
 
 ## Build From Source
 ```shell
