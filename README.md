@@ -1,6 +1,13 @@
 ## Browser Integration
 As of version 1.3.0, Brisk supports browser integration that allows for capturing downloads from the browser and adding them directly into the app.
 
+## Features
+- Capture download requests from the browser and directly adding them to Brisk
+- Extract all download links from a selected text and add them to Brisk in one go
+
+
+## Demo
+
 ### Installation
 #### Chrome / Edge / Opera
 [link-chrome]: https://github.com/AminBhst/brisk-browser-extension/releases/latest 'Version published on Chrome Web Store'
