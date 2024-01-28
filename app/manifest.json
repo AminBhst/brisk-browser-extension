@@ -1,13 +1,8 @@
 {
   "name": "Brisk",
-  "short_name": "Brisk",
   "description": "Browser extension for Brisk download manager",
   "version": "1.1.2",
-  "__firefox__browser_specific_settings": {
-    "gecko": {
-      "id": "{9ca5a4a8-58d1-4a47-8e0d-5e53a21c9a7b}"
-    }
-  },
+  "short_name": "Brisk",
   "manifest_version": 3,
   "homepage_url": "https://github.com/AminBhst/brisk-browser-extension",
   "background": {
@@ -15,34 +10,45 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["scripts/content-script.js"]
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "scripts/content-script.js"
+      ]
     }
   ],
-  "__firefox__background":{
-    "scripts": ["scripts/background.js"]
-  },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
   "action": {
     "default_icon": {
       "16": "images/logo16.png",
-      "32": "images/logo.png",
-      "48": "images/logo.png",
-      "128": "images/logo.png"
+      "32": "images/logo32.png",
+      "48": "images/logo48.png",
+      "128": "images/logo128.png"
     },
     "default_title": "__MSG_browserActionTitle__",
     "default_popup": "pages/popup.html"
   },
   "icons": {
     "16": "images/logo16.png",
-    "32": "images/logo.png"
+    "32": "images/logo32.png",
+    "48": "images/logo48.png",
+    "128": "images/logo128.png"
   },
-  "web_accessible_resources": [{
-    "resources": ["scripts/*", "styles/*","images/*"],
-    "matches": ["<all_urls>"]
-  }],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "scripts/*",
+        "styles/*",
+        "images/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
   "permissions": [
     "downloads",
     "storage",
