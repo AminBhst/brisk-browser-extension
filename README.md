@@ -6,7 +6,7 @@
 <p align="center">Automatic Browser Download Capture for Brisk Download Manager</p>
 
 
-### :package: Installation
+## :package: Installation
 #### Chrome / Edge / Opera
 [link-chrome]: https://github.com/AminBhst/brisk-browser-extension/releases/latest 'Version published on Chrome Web Store'
 
