@@ -1,3 +1,7 @@
+[![release](https://img.shields.io/github/v/release/AminBhst/brisk-browser-extension?style=flat-square)](https://github.com/AminBhst/brisk/releases)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/AminBhst/brisk-browser-extension/total?style=flat-square)
+<a href="https://discord.gg/g8fwgZ84"><img alt="Discord Chat" src="https://img.shields.io/discord/1298990692000989225?color=5865F2&label=discord&style=flat-square"></a>
+
 ## Browser Integration
 As of version 1.3.0, Brisk supports browser integration that allows for capturing downloads from the browser and adding them directly into the app.
 
