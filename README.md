@@ -12,7 +12,7 @@
 
 [<img src="https://raw.githubusercontent.com/alrra/browser-logos/90fdf03c/src/chrome/chrome.svg" width="48" alt="Chrome" valign="middle">][link-chrome] [<img src="https://raw.githubusercontent.com/alrra/browser-logos/90fdf03c/src/edge/edge.svg" width="48" alt="Edge" valign="middle">][link-chrome] [<img src="https://raw.githubusercontent.com/alrra/browser-logos/90fdf03c/src/opera/opera.svg" width="48" alt="Opera" valign="middle">][link-chrome]
 
-<p>For the above browsers, you'll need to manually download and install the latest version from releases. There is an extension installation guide in the faq channel of my discord server if you faced any issues with installation</p>
+<p>For the above browsers, you'll need to manually download and install the latest version from releases. There is an extension installation guide in the faq channel of my discord server if you faced any issues with regards to the installation.</p>
 
 #### Firefox
 [link-firefox]: https://addons.mozilla.org/en-US/firefox/addon/brisk/
