@@ -1,6 +1,7 @@
 import * as browser from "webextension-polyfill";
 
 export const defaultPort = 3020;
+const extensionVersion = browser.runtime.getManifest().version;
 
 async function getBriskBaseUrl() {
     return "http://localhost:" + await getBriskPort();
@@ -12,6 +13,7 @@ export async function sendRequestToBrisk(body) {
     //     return;
 
     // lastRequestSent = Date.now();
+    body.extensionVersion = extensionVersion;
     return await fetch(
         await getBriskBaseUrl(),
         {method: 'POST', body: JSON.stringify(body)}

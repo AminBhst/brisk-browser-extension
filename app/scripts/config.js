@@ -1,8 +1,10 @@
 import * as browser from 'webextension-polyfill';
 
 
-await setPortValue();
-setSaveButtonAction();
+document.addEventListener('DOMContentLoaded', async () => {
+    await setPortValue();
+    setSaveButtonAction();
+});
 
 async function onSaveClicked() {
     let port = document.getElementById("port").value;
@@ -18,6 +20,10 @@ function setSaveButtonAction() {
 }
 
 async function setPortValue() {
-    let val = await browser.storage.sync.get(['briskPort']);
-    document.getElementById("port").value = val['briskPort'];
+    try {
+        let val = await browser.storage.sync.get(['briskPort']);
+        document.getElementById("port").value = val['briskPort'];
+    } catch (e) {
+        console.log(e);
+    }
 }

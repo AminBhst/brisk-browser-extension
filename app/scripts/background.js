@@ -4,8 +4,10 @@ import {sendRequestToBrisk} from "./common";
 
 let downloadHrefs;
 createContextMenuItem();
+browser.runtime.onInstalled.addListener(() => {
+    browser.storage.sync.set({briskPort: 3020});
+});
 browser.downloads.onCreated.addListener(sendBriskDownloadAdditionRequest);
-
 browser.runtime.onMessage.addListener((message) => downloadHrefs = message);
 
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
@@ -45,11 +47,14 @@ async function removeBrowserDownload(id) {
 }
 
 function createContextMenuItem() {
-    browser.contextMenus.create({
-        id: "brisk-download",
-        title: "Download selected links with Brisk",
-        contexts: ["selection"]
-    }, () => null);
+    browser.contextMenus.removeAll().then(() => {
+            browser.contextMenus.create({
+                id: "brisk-download",
+                title: "Download selected links with Brisk",
+                contexts: ["selection"]
+            }, () => null);
+        }
+    ).catch(console.log);
 }
 
 const pass = () => null;

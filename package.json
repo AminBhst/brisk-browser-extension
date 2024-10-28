@@ -1,6 +1,6 @@
 {
   "name": "brisk-browser-extension",
-  "version": "1.0.0",
+  "version": "1.1.2",
   "description": "WebExtension for Brisk download manager",
   "scripts": {
     "dev": "webextension-toolbox dev",

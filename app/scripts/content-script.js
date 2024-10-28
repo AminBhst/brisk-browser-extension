@@ -12,8 +12,12 @@ function debounce(fn, delay) {
 }
 
 document.addEventListener("selectionchange", debounce(function (event) {
-    let extractedHrefs = getHrefOfAllSelectedLinks();
-    sendHrefsToBackground(extractedHrefs);
+    try {
+        let extractedHrefs = getHrefOfAllSelectedLinks();
+        sendHrefsToBackground(extractedHrefs);
+    } catch (e) {
+        console.log(e);
+    }
 }, 250));
 
 

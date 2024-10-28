@@ -1,8 +1,13 @@
 {
   "name": "Brisk",
-  "description": "Browser extension for Brisk download manager",
-  "version": "1.1.2",
   "short_name": "Brisk",
+  "description": "Browser extension for Brisk download manager",
+  "version": "1.1.3",
+  "__firefox__browser_specific_settings": {
+    "gecko": {
+      "id": "{9ca5a4a8-58d1-4a47-8e0d-5e53a21c9a7b}"
+    }
+  },
   "manifest_version": 3,
   "homepage_url": "https://github.com/AminBhst/brisk-browser-extension",
   "background": {
@@ -18,6 +23,11 @@
       ]
     }
   ],
+  "__firefox__background": {
+    "scripts": [
+      "scripts/background.js"
+    ]
+  },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
@@ -34,7 +44,6 @@
   "icons": {
     "16": "images/logo16.png",
     "32": "images/logo32.png",
-    "48": "images/logo48.png",
     "128": "images/logo128.png"
   },
   "web_accessible_resources": [
