@@ -35,7 +35,8 @@ async function sendBriskDownloadAdditionRequest(downloadItem) {
         }
     };
     let response = await sendRequestToBrisk(body);
-    if (response.status === 200) {
+    let json = await response.json();
+    if (response.status === 200 && json["captured"]) {
         await removeBrowserDownload(downloadItem.id);
     }
 }
