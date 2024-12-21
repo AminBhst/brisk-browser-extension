@@ -1,25 +1,34 @@
-<!DOCTYPE HTML>
-
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brisk</title>
-    <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+    <title>Extension Popup</title>
     <link rel="stylesheet" href="../styles/common.css">
 </head>
 <body>
-<div class="row">
-    <div class="col-md-12">
-        <img src="../images/logo128.png" alt="Brisk">
-        <label for="port">Port:</label>
-        <input type="number" id="port" name="port">
-        <button id="save" type="submit">Save</button>
+<div class="container">
+    <!-- Tab Navigation -->
+    <div class="tabs">
+        <button class="tab-button active" data-tab="video-streams">🎥 Video Streams</button>
+        <button class="tab-button" data-tab="settings">⚙️ Settings</button>
+    </div>
+    <!-- Tab Content -->
+    <div class="tab-content active" id="video-streams">
+        <ul id="m3u8-list" class="streams-list">
+        </ul>
+    </div>
+    <div class="tab-content" id="settings">
+        <h2>⚙️ Settings</h2>
+        <p class="description">Adjust your preferences below:</p>
+        <div class="settings-item">
+            <label>
+                <input type="checkbox" id="enable-stream-detection" checked>
+                Enable Stream Detection
+            </label>
+        </div>
     </div>
 </div>
-
-
-<script src="../scripts/config.js"></script>
-
+<script src="../scripts/popup.js"></script>
 </body>
 </html>
