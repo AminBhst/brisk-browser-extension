@@ -10,16 +10,24 @@ function createM3u8List(m3u8Urls, listContainer) {
         const downloadButton = document.createElement('button');
         downloadButton.textContent = 'Download';
         downloadButton.classList.add('download-btn');
-        downloadButton.addEventListener('click', () => {
+        downloadButton.addEventListener('click', async () => {
+            let tabId = await getCurrentTabId();
+            let vttUrls = await browser.runtime.sendMessage({type: 'get-vtt-list', tabId});
             sendRequestToBrisk({
                 'type': 'm3u8',
-                'url': url
+                'm3u8Url': url,
+                'vttUrls': vttUrls['vttUrls']
             });
         });
         listItem.appendChild(nameSpan);
         listItem.appendChild(downloadButton);
         listContainer.appendChild(listItem);
     });
+}
+
+async function getCurrentTabId() {
+    let tabs = await browser.tabs.query({active: true, currentWindow: true});
+    return tabs[0].id;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
