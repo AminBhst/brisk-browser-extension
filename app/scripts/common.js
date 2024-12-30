@@ -7,12 +7,7 @@ async function getBriskBaseUrl() {
     return "http://localhost:" + await getBriskPort();
 }
 
-let lastRequestSent = 0;
 export async function sendRequestToBrisk(body) {
-    // if (lastRequestSent + 1000 > Date.now())
-    //     return;
-
-    // lastRequestSent = Date.now();
     body.extensionVersion = extensionVersion;
     return await fetch(
         await getBriskBaseUrl(),
