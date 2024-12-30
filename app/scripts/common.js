@@ -21,10 +21,9 @@ export async function sendRequestToBrisk(body) {
 }
 
 export async function getBriskPort() {
-    let val = await browser.storage.sync.get(['briskPort']);
-    if (!val || Object.keys(val).length === 0) {
-        await browser.storage.sync.set({briskPort: defaultPort});
-        return defaultPort;
+    let data = await browser.storage.local.get(['briskPort']);
+    if (data.briskPort) {
+        return data.briskPort;
     }
-    return val['briskPort'];
+    return defaultPort;
 }
