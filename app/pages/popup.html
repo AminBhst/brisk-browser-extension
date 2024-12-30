@@ -8,24 +8,19 @@
 </head>
 <body>
 <div class="container">
-    <!-- Tab Navigation -->
     <div class="tabs">
         <button class="tab-button active" data-tab="video-streams">🎥 Video Streams</button>
         <button class="tab-button" data-tab="settings">⚙️ Settings</button>
     </div>
-    <!-- Tab Content -->
     <div class="tab-content active" id="video-streams">
         <ul id="m3u8-list" class="streams-list">
         </ul>
     </div>
     <div class="tab-content" id="settings">
-        <h2>⚙️ Settings</h2>
-        <p class="description">Adjust your preferences below:</p>
-        <div class="settings-item">
-            <label>
-                <input type="checkbox" id="enable-stream-detection" checked>
-                Enable Stream Detection
-            </label>
+        <div class="port-setting">
+            <label for="port">Port:</label>
+            <input type="number" id="port" placeholder="3020" min="1" max="65535">
+            <button id="save-port">Save</button>
         </div>
     </div>
 </div>

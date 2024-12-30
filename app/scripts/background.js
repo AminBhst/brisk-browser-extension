@@ -22,12 +22,11 @@ browser.webRequest.onBeforeRequest.addListener(
             }
             if (!m3u8UrlsByTab[tabId].includes(details.url)) {
                 m3u8UrlsByTab[tabId].push(details.url);
-                browser.runtime.sendMessage({type: 'new-m3u8', url: details.url, tabId});
             }
         }
     },
     {urls: ['<all_urls>']},
-    ['blocking']
+    []
 );
 
 

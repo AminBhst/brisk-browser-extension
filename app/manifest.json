@@ -64,7 +64,6 @@
     "cookies",
     "contextMenus",
     "webRequest",
-    "webRequestBlocking",
     "tabs"
   ],
   "host_permissions": [
