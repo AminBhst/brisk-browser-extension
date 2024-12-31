@@ -19,6 +19,8 @@
 
 [<img src="https://raw.githubusercontent.com/alrra/browser-logos/90fdf03c/src/firefox/firefox.svg" width="48" alt="Firefox" valign="middle">][link-firefox]
 
+For Firefox users, the extension is available on the official [Firefox Addons Website](https://addons.mozilla.org/en-US/firefox/addon/brisk/).
+
 ## :rocket: Features
 - Capturing download requests from the browser and directly adding them to Brisk
 - Extracting all download links from a selected text and adding them to Brisk all at once
