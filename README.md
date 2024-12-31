@@ -22,6 +22,7 @@
 ## :rocket: Features
 - Capturing download requests from the browser and directly adding them to Brisk
 - Extracting all download links from a selected text and adding them to Brisk all at once
+- Capturing m3u8 video streams from the browser
 
 ## :film_projector: Demo
 <img align="center" src="Brisk-Demo.gif">
