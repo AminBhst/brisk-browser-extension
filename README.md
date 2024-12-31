@@ -27,7 +27,7 @@ For Firefox users, the extension is available on the official [Firefox Addons We
 - Capturing m3u8 video streams from the browser
 
 ## :film_projector: Demo
-<img align="center" src="Brisk-Demo.gif">
+https://github.com/user-attachments/assets/fc63dcf4-0e69-4610-9c92-f26f12f9ad01
 
 ## Build From Source
 ```shell
