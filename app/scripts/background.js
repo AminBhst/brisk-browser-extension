@@ -3,6 +3,7 @@ import {sendRequestToBrisk} from "./common";
 
 let m3u8UrlsByTab = {};
 let vttUrlsByTab = {};
+let videoUrlsByTab = {};
 let downloadHrefs;
 createContextMenuItem();
 browser.runtime.onInstalled.addListener(() => {
@@ -15,13 +16,17 @@ browser.runtime.onMessage.addListener((message) => downloadHrefs = message);
 
 // Listen for m3u8 requests
 browser.webRequest.onBeforeRequest.addListener(
-    (details) => {
+    async (details) => {
         const {tabId, url} = details;
         if (url.endsWith('.m3u8')) {
             addUrlToTab(m3u8UrlsByTab, tabId, url);
         }
         if (url.endsWith('.vtt')) {
             addUrlToTab(vttUrlsByTab, tabId, url);
+        }
+        if (url.endsWith(".mp4") || url.endsWith(".webm")) {
+            console.log("Found mp4 url");
+            addUrlToTab(videoUrlsByTab, tabId, url);
         }
     },
     {urls: ['<all_urls>']},
@@ -42,13 +47,21 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status === 'complete') {
         m3u8UrlsByTab[tabId] = [];
         vttUrlsByTab[tabId] = [];
+        videoUrlsByTab[tabId] = [];
     }
 });
 
 // Listen for requests from popup to get m3u8 URLs for the current tab
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === 'get-m3u8-list') {
-        const urls = m3u8UrlsByTab[message.tabId] || [];
+        let urls = m3u8UrlsByTab[message.tabId] || [];
+        console.log("Videos:");
+        console.log(videoUrlsByTab[message.tabId]);
+        if (videoUrlsByTab[message.tabId]) {
+            urls.push(...videoUrlsByTab[message.tabId]);
+        }
+        console.log("final urls:");
+        console.log(urls);
         sendResponse({m3u8Urls: urls});
     }
     if (message.type === 'get-vtt-list') {
@@ -61,7 +74,10 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
     if (info.menuItemId === "brisk-download") {
         let body = {
             "type": "multi",
-            "data": {downloadHrefs}
+            "data": {
+                "referer": tab.url,
+                downloadHrefs
+            },
         };
         try {
             await sendRequestToBrisk(body);
@@ -77,8 +93,7 @@ async function sendBriskDownloadAdditionRequest(downloadItem) {
         "type": "single",
         "data": {
             'url': downloadItem.url,
-            'totalBytes': downloadItem.totalBytes,
-            'cookies': downloadItem.cookies
+            'referer': downloadItem.referrer
         }
     };
     let response = await sendRequestToBrisk(body);

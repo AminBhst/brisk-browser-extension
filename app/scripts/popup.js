@@ -10,18 +10,38 @@ function createM3u8List(m3u8Urls, listContainer) {
         const downloadButton = document.createElement('button');
         downloadButton.textContent = 'Download';
         downloadButton.classList.add('download-btn');
-        downloadButton.addEventListener('click', async () => {
-            let tabId = await getCurrentTabId();
-            let vttUrls = await browser.runtime.sendMessage({type: 'get-vtt-list', tabId});
-            sendRequestToBrisk({
-                'type': 'm3u8',
-                'm3u8Url': url,
-                'vttUrls': vttUrls['vttUrls']
-            });
-        });
+        registerVideoStreamDownloadClickListener(downloadButton, url);
         listItem.appendChild(nameSpan);
         listItem.appendChild(downloadButton);
         listContainer.appendChild(listItem);
+    });
+}
+
+function registerVideoStreamDownloadClickListener(downloadButton, url) {
+    downloadButton.addEventListener('click', async () => {
+        let tabId = await getCurrentTabId();
+        const tab = await browser.tabs.get(tabId);
+        if (url.endsWith(".mp4") || url.endsWith(".webm")) {
+            console.log("URl is mp4....");
+            let body = {
+                'type': 'single',
+                'data': {
+                    'url': url,
+                    'referer': tab.url
+                }
+            };
+            console.log("Sending body to brisk");
+            console.log(body);
+            await sendRequestToBrisk(body);
+        } else {
+            let vttUrls = await browser.runtime.sendMessage({type: 'get-vtt-list', tabId});
+            await sendRequestToBrisk({
+                'type': 'm3u8',
+                'm3u8Url': url,
+                'vttUrls': vttUrls['vttUrls'],
+                'referer': tab.url
+            });
+        }
     });
 }
 
