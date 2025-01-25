@@ -25,7 +25,6 @@ browser.webRequest.onBeforeRequest.addListener(
             addUrlToTab(vttUrlsByTab, tabId, url);
         }
         if (url.endsWith(".mp4") || url.endsWith(".webm")) {
-            console.log("Found mp4 url");
             addUrlToTab(videoUrlsByTab, tabId, url);
         }
     },
@@ -55,13 +54,9 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === 'get-m3u8-list') {
         let urls = m3u8UrlsByTab[message.tabId] || [];
-        console.log("Videos:");
-        console.log(videoUrlsByTab[message.tabId]);
         if (videoUrlsByTab[message.tabId]) {
             urls.push(...videoUrlsByTab[message.tabId]);
         }
-        console.log("final urls:");
-        console.log(urls);
         sendResponse({m3u8Urls: urls});
     }
     if (message.type === 'get-vtt-list') {

@@ -22,7 +22,6 @@ function registerVideoStreamDownloadClickListener(downloadButton, url) {
         let tabId = await getCurrentTabId();
         const tab = await browser.tabs.get(tabId);
         if (url.endsWith(".mp4") || url.endsWith(".webm")) {
-            console.log("URl is mp4....");
             let body = {
                 'type': 'single',
                 'data': {
@@ -30,8 +29,6 @@ function registerVideoStreamDownloadClickListener(downloadButton, url) {
                     'referer': tab.url
                 }
             };
-            console.log("Sending body to brisk");
-            console.log(body);
             await sendRequestToBrisk(body);
         } else {
             let vttUrls = await browser.runtime.sendMessage({type: 'get-vtt-list', tabId});
