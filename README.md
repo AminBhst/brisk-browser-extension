@@ -36,4 +36,6 @@ yarn build {browser-name}
 ```
 
 ## :busts_in_silhouette: Community
-Join our [discord server](https://discord.gg/g8fwgZ84) for dedicated spaces where both developers and regular users can ask questions, get support, and connect. We’d love to have you as part of the community!
+
+  <div><a href="https://discord.gg/hGBDWNDHG3"><img src="https://discord.com/api/guilds/1298990692000989225/widget.png?style=banner2" alt="cord.nvim"/></a></div>
+
