@@ -15,29 +15,31 @@ browser.downloads.onCreated.addListener(sendBriskDownloadAdditionRequest);
 browser.runtime.onMessage.addListener((message) => downloadHrefs = message);
 
 // Listen for m3u8 requests
-browser.webRequest.onBeforeRequest.addListener(
+browser.webRequest.onBeforeSendHeaders.addListener(
     async (details) => {
-        const {tabId, url} = details;
+        const {tabId, url, requestHeaders} = details;
+        const refererHeader = requestHeaders.find(h => h.name.toLowerCase() === 'referer');
+        const referer = refererHeader?.value || null;
         if (url.endsWith('.m3u8')) {
-            addUrlToTab(m3u8UrlsByTab, tabId, url);
+            addUrlToTab(m3u8UrlsByTab, tabId, url, referer);
         }
         if (url.endsWith('.vtt')) {
-            addUrlToTab(vttUrlsByTab, tabId, url);
+            addUrlToTab(vttUrlsByTab, tabId, url, referer);
         }
         if (url.endsWith(".mp4") || url.endsWith(".webm")) {
-            addUrlToTab(videoUrlsByTab, tabId, url);
+            addUrlToTab(videoUrlsByTab, tabId, url, referer);
         }
     },
     {urls: ['<all_urls>']},
-    []
+    ["requestHeaders"]
 );
 
-function addUrlToTab(urlsByTab, tabId, url) {
+function addUrlToTab(urlsByTab, tabId, url, referer) {
     if (!urlsByTab[tabId]) {
         urlsByTab[tabId] = [];
     }
     if (!urlsByTab[tabId].includes(url)) {
-        urlsByTab[tabId].push(url);
+        urlsByTab[tabId].push({url: url, referer: referer});
     }
 }
 

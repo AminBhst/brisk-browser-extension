@@ -2,31 +2,32 @@ import * as browser from 'webextension-polyfill';
 import {sendRequestToBrisk} from "./common";
 
 function createM3u8List(m3u8Urls, listContainer) {
-    m3u8Urls.forEach((url) => {
-        const fileName = url.substring(url.lastIndexOf('/') + 1);
+    m3u8Urls.forEach((obj) => {
+        const fileName = obj.url.substring(obj.url.lastIndexOf('/') + 1);
         const listItem = document.createElement('li');
         const nameSpan = document.createElement('span');
         nameSpan.textContent = fileName;
         const downloadButton = document.createElement('button');
         downloadButton.textContent = 'Download';
         downloadButton.classList.add('download-btn');
-        registerVideoStreamDownloadClickListener(downloadButton, url);
+        registerVideoStreamDownloadClickListener(downloadButton, obj);
         listItem.appendChild(nameSpan);
         listItem.appendChild(downloadButton);
         listContainer.appendChild(listItem);
     });
 }
 
-function registerVideoStreamDownloadClickListener(downloadButton, url) {
+function registerVideoStreamDownloadClickListener(downloadButton, obj) {
     downloadButton.addEventListener('click', async () => {
         let tabId = await getCurrentTabId();
         const tab = await browser.tabs.get(tabId);
-        if (url.endsWith(".mp4") || url.endsWith(".webm")) {
+        if (obj.url.endsWith(".mp4") || obj.url.endsWith(".webm")) {
             let body = {
                 'type': 'single',
                 'data': {
-                    'url': url,
-                    'referer': tab.url
+                    'url': obj.url,
+                    'referer': tab.url,
+                    'refererHeader': obj.referer,
                 }
             };
             await sendRequestToBrisk(body);
@@ -34,9 +35,10 @@ function registerVideoStreamDownloadClickListener(downloadButton, url) {
             let vttUrls = await browser.runtime.sendMessage({type: 'get-vtt-list', tabId});
             await sendRequestToBrisk({
                 'type': 'm3u8',
-                'm3u8Url': url,
+                'm3u8Url': obj.url,
                 'vttUrls': vttUrls['vttUrls'],
-                'referer': tab.url
+                'referer': tab.url,
+                'refererHeader': obj.referer,
             });
         }
     });
