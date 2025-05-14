@@ -1,9 +1,6 @@
 [![release](https://img.shields.io/github/v/release/AminBhst/brisk-browser-extension?style=flat-square)](https://github.com/AminBhst/brisk/releases)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/AminBhst/brisk-browser-extension/total?style=flat-square)
 <a href="https://discord.gg/hGBDWNDHG3"><img alt="Discord Chat" src="https://img.shields.io/discord/1298990692000989225?color=5865F2&label=discord&style=flat-square"></a>
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/9728a814-30eb-4acc-ba4f-c5220b89be21" alt="browser-brisk" width="200"/>
-</p>
 
 
 <p align="center">Browser extension for Brisk Download Manager</p>
