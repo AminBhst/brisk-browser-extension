@@ -22,3 +22,9 @@ export async function getBriskPort() {
     }
     return defaultPort;
 }
+
+
+export function extractResolution(text) {
+    const match = text.match(/(?:\b|\D)(\d{3,4})p?\b/i);
+    return match ? match[1] + (text.includes(match[1] + 'p') ? 'p' : '') : null;
+}

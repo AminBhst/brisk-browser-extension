@@ -1,12 +1,12 @@
 import * as browser from 'webextension-polyfill';
-import {sendRequestToBrisk} from "./common";
+import {sendRequestToBrisk, extractResolution} from "./common";
 
-function createM3u8List(m3u8Urls, listContainer) {
+async function createM3u8List(tabId, m3u8Urls, listContainer) {
+    let suggestedName = await browser.tabs.sendMessage(tabId, {type: 'get-suggested-video-name'});
     m3u8Urls.forEach((obj) => {
-        const fileName = obj.url.substring(obj.url.lastIndexOf('/') + 1);
         const listItem = document.createElement('li');
         const nameSpan = document.createElement('span');
-        nameSpan.textContent = fileName;
+        nameSpan.textContent = resolveSuggestedName(obj, suggestedName, true);
         const downloadButton = document.createElement('button');
         downloadButton.textContent = 'Download';
         downloadButton.classList.add('download-btn');
@@ -17,16 +17,43 @@ function createM3u8List(m3u8Urls, listContainer) {
     });
 }
 
+
+function resolveSuggestedName(obj, suggestedName, handleMaster) {
+    let fileNameFromUrl = obj.url.substring(obj.url.lastIndexOf('/') + 1)
+    if (fileNameFromUrl.includes('.m3u8?')) {
+        fileNameFromUrl = fileNameFromUrl.substring(0, fileNameFromUrl.indexOf('.m3u8?') + 5)
+    }
+    if (fileNameFromUrl.includes('.mp4?')) {
+        fileNameFromUrl = fileNameFromUrl.substring(0, fileNameFromUrl.indexOf('.mp4?') + 4)
+    }
+    if (suggestedName == null || suggestedName === '') {
+        return fileNameFromUrl;
+    }
+    let resolution = extractResolution(fileNameFromUrl);
+    if (suggestedName.endsWith(".mp4")) {
+        return resolution
+            ? `${suggestedName}.${resolution}.mp4`
+            : `${suggestedName}.mp4`;
+    } else if (handleMaster && fileNameFromUrl.includes("master")) {
+        return `${suggestedName}.all.resolutions.ts`;
+    } else {
+        return `${suggestedName}.ts`;
+    }
+}
+
 function registerVideoStreamDownloadClickListener(downloadButton, obj) {
     downloadButton.addEventListener('click', async () => {
         let tabId = await getCurrentTabId();
         const tab = await browser.tabs.get(tabId);
+        let suggestedName = await browser.tabs.sendMessage(tabId, {type: 'get-suggested-video-name'});
+        suggestedName = resolveSuggestedName(obj, suggestedName, false);
         if (obj.url.endsWith(".mp4") || obj.url.endsWith(".webm")) {
             let body = {
                 'type': 'single',
                 'data': {
                     'url': obj.url,
                     'referer': tab.url,
+                    'suggestedName': suggestedName,
                     'refererHeader': obj.referer,
                 }
             };
@@ -38,6 +65,7 @@ function registerVideoStreamDownloadClickListener(downloadButton, obj) {
                 'm3u8Url': obj.url,
                 'vttUrls': vttUrls['vttUrls'],
                 'referer': tab.url,
+                'suggestedName': suggestedName,
                 'refererHeader': obj.referer,
             });
         }
@@ -80,7 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
     browser.tabs.query({active: true, currentWindow: true}).then((tabs) => {
         const tabId = tabs[0].id; // Get current tab's ID
         browser.runtime.sendMessage({type: 'get-m3u8-list', tabId}).then((response) => {
-            createM3u8List(response.m3u8Urls, listContainer);
+            console.log(`m3u8 received ${response.m3u8Urls}`);
+            createM3u8List(tabId, response.m3u8Urls, listContainer);
         });
     });
 });

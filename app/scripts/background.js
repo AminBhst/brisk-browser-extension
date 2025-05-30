@@ -6,6 +6,13 @@ let vttUrlsByTab = {};
 let videoUrlsByTab = {};
 let downloadHrefs;
 createContextMenuItem();
+
+const isFirefox = navigator.userAgent.includes("Firefox");
+const extraInfoSpec = ["requestHeaders"];
+if (!isFirefox) {
+    extraInfoSpec.push("extraHeaders");
+}
+
 browser.runtime.onInstalled.addListener(() => {
     browser.storage.sync.set({briskPort: 3020});
 });
@@ -14,25 +21,40 @@ browser.downloads.onCreated.addListener(sendBriskDownloadAdditionRequest);
 
 browser.runtime.onMessage.addListener((message) => downloadHrefs = message);
 
-// Listen for m3u8 requests
-browser.webRequest.onBeforeSendHeaders.addListener(
-    async (details) => {
-        const {tabId, url, requestHeaders} = details;
-        const refererHeader = requestHeaders.find(h => h.name.toLowerCase() === 'referer');
-        const referer = refererHeader?.value || null;
-        if (url.endsWith('.m3u8')) {
-            addUrlToTab(m3u8UrlsByTab, tabId, url, referer);
+browser.webRequest.onBeforeSendHeaders.addListener(async (details) => {
+    handleVideoStreams(details);
+}, {urls: ['<all_urls>']}, extraInfoSpec);
+
+
+function handleVideoStreams(details) {
+    const {tabId, url, requestHeaders} = details;
+    const refererHeader = requestHeaders.find(h => h.name.toLowerCase() === 'referer');
+    const referer = refererHeader?.value || null;
+    const pathName = new URL(url).pathname;
+    if (pathName.endsWith('m3u8')) {
+        addUrlToTab(m3u8UrlsByTab, tabId, url, referer);
+    }
+    // For aniplaynow.live
+    if (url.includes("/m3u8-proxy")) {
+        const urlObj = new URL(url);
+        const rawUrl = urlObj.searchParams.get("url");
+        const realM3u8Url = rawUrl || null;
+        const headersParam = urlObj.searchParams.get("headers");
+        let realReferer = referer;
+        if (!headersParam) {
+            const headers = JSON.parse(headersParam);
+            realReferer = headers.Referer;
         }
-        if (url.endsWith('.vtt')) {
-            addUrlToTab(vttUrlsByTab, tabId, url, referer);
-        }
-        if (url.endsWith(".mp4") || url.endsWith(".webm")) {
-            addUrlToTab(videoUrlsByTab, tabId, url, referer);
-        }
-    },
-    {urls: ['<all_urls>']},
-    ["requestHeaders"]
-);
+        console.log(`realM3u8 ${realM3u8Url}`);
+        console.log(`real header ${realReferer}`);
+        addUrlToTab(m3u8UrlsByTab, tabId, realM3u8Url, realReferer);
+    } else if (url.endsWith('.vtt')) {
+        console.log(`vtt referer ${referer}`);
+        addUrlToTab(vttUrlsByTab, tabId, url, referer);
+    } else if (url.endsWith(".mp4") || url.endsWith(".webm")) {
+        addUrlToTab(videoUrlsByTab, tabId, url, referer);
+    }
+}
 
 function addUrlToTab(urlsByTab, tabId, url, referer) {
     if (!urlsByTab[tabId]) {
@@ -54,6 +76,7 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
 // Listen for requests from popup to get m3u8 URLs for the current tab
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log(message);
     if (message.type === 'get-m3u8-list') {
         let urls = m3u8UrlsByTab[message.tabId] || [];
         if (videoUrlsByTab[message.tabId]) {
@@ -70,10 +93,8 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
     if (info.menuItemId === "brisk-download") {
         let body = {
-            "type": "multi",
-            "data": {
-                "referer": tab.url,
-                downloadHrefs
+            "type": "multi", "data": {
+                "referer": tab.url, downloadHrefs
             },
         };
         try {
@@ -87,10 +108,8 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
 
 async function sendBriskDownloadAdditionRequest(downloadItem) {
     let body = {
-        "type": "single",
-        "data": {
-            'url': downloadItem.url,
-            'referer': downloadItem.referrer
+        "type": "single", "data": {
+            'url': downloadItem.url, 'referer': downloadItem.referrer
         }
     };
     let response = await sendRequestToBrisk(body);
@@ -108,13 +127,10 @@ async function removeBrowserDownload(id) {
 
 function createContextMenuItem() {
     browser.contextMenus.removeAll().then(() => {
-            browser.contextMenus.create({
-                id: "brisk-download",
-                title: "Download selected links with Brisk",
-                contexts: ["selection"]
-            }, () => null);
-        }
-    ).catch(console.log);
+        browser.contextMenus.create({
+            id: "brisk-download", title: "Download selected links with Brisk", contexts: ["selection"]
+        }, () => null);
+    }).catch(console.log);
 }
 
 const pass = () => null;
